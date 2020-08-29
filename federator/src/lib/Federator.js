@@ -122,27 +122,37 @@ module.exports = class Federator {
 
     async _processLogs(logs, toBlock) {
 
-        for(let log of logs) {
+        try {
+            for(let log of logs) {
             
-            this.logger.info('Processing event log:', log);
-
-            const { _to: receiver, _amount: amount, _symbol: symbol, _tokenAddress: tokenAddress,
-                _decimals: decimals, _granularity:granularity } = log.returnValues;
-                                   
-            // const ckbPrivateKey = '6db47b34420e526812ff77a78e716edc50800ec2e9ec4eec769ae010edf4b016';
-            const federatorPK  = '0x82312a7eb2168e6f36401f35942062f75b17466dce7df8be484e7b9588a09d03';           
-            // const ckbPublicKey = this.privateToPublic(Buffer.from(ckbPrivateKey, 'hex'));
-            // const ckbPublicKey = this.privateToPublic(Buffer.from(ckbPrivateKey, 'hex')).toString('hex');
-            // const fedPublicKey = this.privateToPublic(Buffer.from(federatorPK, 'hex')).toString('hex');
-            //const fedAddres = this.publicKeyToAddress(fedPublicKey,'ckt');
-            const fedAddres = 'ckt1qyqwtq7qhg6j9hfqxnndmxyzmlamn85dhs7sjn8rsl';
-            console.log(/fedAddres/,fedAddres); //ckt1qyqdzyak353u6vf900t5qfmzzsr4wpx6a96s6749ne
-
-            const toCKBAddress = 'ckt1qyqgadxhtq27ygrm62dqkdj32gl95j8gl56qum0yyn';
-            const ckbAmount = this.mainWeb3.utils.fromWei(amount, 'ether');
-            const mintResult = await mintSudtTransaction(fedAddres,toCKBAddress, ckbAmount * 10, 10000 ,federatorPK);
-            console.log(/mintResult/,mintResult);
-
+                this.logger.info('Processing event log:', log);
+    
+                const { _to: receiver, _amount: amount, _symbol: symbol, _tokenAddress: tokenAddress,
+                    _decimals: decimals, _granularity:granularity } = log.returnValues;
+                                       
+                // const ckbPrivateKey = '6db47b34420e526812ff77a78e716edc50800ec2e9ec4eec769ae010edf4b016';
+                // const federatorPK  = '0x82312a7eb2168e6f36401f35942062f75b17466dce7df8be484e7b9588a09d03';    
+                const federatorPK  = '0xdde136f5c95a2f37cb1480c3bc3d9f18b49225fc8449e5a16a853fc0a7d4efaa';            
+                // const ckbPublicKey = this.privateToPublic(Buffer.from(ckbPrivateKey, 'hex'));
+                // const ckbPublicKey = this.privateToPublic(Buffer.from(ckbPrivateKey, 'hex')).toString('hex');
+                // const fedPublicKey = this.privateToPublic(Buffer.from(federatorPK, 'hex')).toString('hex');
+                // const fedAddres = this.publicKeyToAddress(fedPublicKey,'ckt');
+                // const fedAddres = 'ckt1qyqwtq7qhg6j9hfqxnndmxyzmlamn85dhs7sjn8rsl';
+                const fedAddres = 'ckt1qyqwtq7qhg6j9hfqxnndmxyzmlamn85dhs7sjn8rsl';
+                console.log(/fedAddres/,fedAddres); //ckt1qyqdzyak353u6vf900t5qfmzzsr4wpx6a96s6749ne
+    
+                const toCKBAddress = 'ckt1qyqgadxhtq27ygrm62dqkdj32gl95j8gl56qum0yyn';
+                const ckbAmount = this.mainWeb3.utils.fromWei(amount, 'ether');
+                const mintResult = await mintSudtTransaction(fedAddres, fedAddres, ckbAmount * 10 ** 8, 100000 ,federatorPK);
+                
+                // 逻辑是不是先创建在转？？？
+                console.log(/mintResult/,mintResult);
+                
+                this._saveProgress(this.lastBlockPath, toBlock);
+                return true;
+            }
+        } catch (error) {
+            throw new CustomError(`Exception processing logs`, err);
         }
     }
 

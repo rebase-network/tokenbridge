@@ -610,7 +610,7 @@
     "@nervosnetwork/ckb-sdk-utils" "0.30.0"
     axios "0.19.0"
 
-"@nervosnetwork/ckb-sdk-utils@0.30.0", "@nervosnetwork/ckb-sdk-utils@^0.30.0":
+"@nervosnetwork/ckb-sdk-utils@0.30.0":
   version "0.30.0"
   resolved "https://registry.npm.taobao.org/@nervosnetwork/ckb-sdk-utils/download/@nervosnetwork/ckb-sdk-utils-0.30.0.tgz#49e92419084b5f84780d15d3252d226960ebd553"
   integrity sha1-SekkGQhLX4R4DRXTJS0iaWDr1VM=
@@ -733,6 +733,11 @@
   version "14.6.2"
   resolved "https://registry.npm.taobao.org/@types/node/download/@types/node-14.6.2.tgz#264b44c5a28dfa80198fc2f7b6d3c8a054b9491f"
   integrity sha1-JktExaKN+oAZj8L3ttPIoFS5SR8=
+
+"@types/node@12.12.31":
+  version "12.12.31"
+  resolved "https://registry.npm.taobao.org/@types/node/download/@types/node-12.12.31.tgz#d6b4f9645fee17f11319b508fb1001797425da51"
+  integrity sha1-1rT5ZF/uF/ETGbUI+xABeXQl2lE=
 
 "@types/node@^12.12.6":
   version "12.12.54"
