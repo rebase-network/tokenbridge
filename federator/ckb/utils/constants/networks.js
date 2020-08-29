@@ -1,9 +1,9 @@
 // import configService from '@src/config';
 
 export const NETWORK_TYPES = {
-  testnet: 'testnet',
-  mainnet: 'mainnet',
-};
+	testnet: 'testnet',
+	mainnet: 'mainnet',
+}
 
 // export const networks = [
 //   {
@@ -28,4 +28,4 @@ export const NETWORK_TYPES = {
 //     cacheURL: 'http://127.0.0.1:3000',
 //   },
 // ];
-export default networks;
+export default networks

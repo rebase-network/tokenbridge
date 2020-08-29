@@ -24,9 +24,7 @@ Axios.interceptors.response.use(
 	}
 )
 
-export const getAddressInfo = async (
-	lockHash: string
-): Promise<{ capacity: string }> => {
+export const getAddressInfo = async (lockHash) => {
 	try {
 		const result = await Axios.get(`${cacheURL}/locks/${lockHash}/capacity`)
 		if (result.errCode !== 0) {
@@ -39,18 +37,18 @@ export const getAddressInfo = async (
 	}
 }
 
-export interface UnspentCellsParams {
-	//   lockHash: string;
-	limit?: string
-	typeHash?: string
-	capacity?: string
-	hasData?: string
-}
+// export interface UnspentCellsParams {
+// 	//   lockHash: string;
+// 	limit?: string
+// 	typeHash?: string
+// 	capacity?: string
+// 	hasData?: string
+// }
 
 // https://github.com/rebase-network/ckb-cache-layer/blob/master/doc.md
 export const getUnspentCells = async (
-	lockHash: string,
-	{ limit, typeHash, capacity, hasData }: UnspentCellsParams
+	lockHash,
+	{ limit, typeHash, capacity, hasData }
 ) => {
 	const params = {
 		lockHash,
@@ -76,24 +74,22 @@ export const getUnspentCells = async (
 	}
 }
 
-export const getTxHistories = async (lockHash): Promise<any> => {
+export const getTxHistories = async (lockHash) => {
 	const url = `${cacheURL}/locks/${lockHash}/txs`
 	const result = await Axios.get(url)
 
 	return result.data
 }
 
-interface TLockAndTypeScripts {
-	lockHash: string
-	typeScripts?: CKBComponents.Script[]
-}
+// interface TLockAndTypeScripts {
+// 	lockHash: string
+// 	typeScripts?: CKBComponents.Script[]
+// }
 
-export const getUDTsByLockHash = async (
-	params: TLockAndTypeScripts
-): Promise<any> => {
+export const getUDTsByLockHash = async (params) => {
 	const { lockHash } = params
 	const pTypeScripts = params.typeScripts
-	const typeHashes: string[] = []
+	const typeHashes = []
 	if (pTypeScripts !== undefined) {
 		for (let i = 0; i < pTypeScripts.length; i++) {
 			const typeScript = pTypeScripts[i]
@@ -110,7 +106,7 @@ export const getUDTsByLockHash = async (
 	return result.data
 }
 
-export const getUnspentCapacity = async (lockHash: string) => {
+export const getUnspentCapacity = async (lockHash) => {
 	try {
 		const result = await Axios.get(`${cacheURL}/locks/${lockHash}/capacity`)
 		if (result.errCode !== 0) {

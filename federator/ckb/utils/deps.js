@@ -1,7 +1,7 @@
 import LOCKS_INFO, { NETWORKS } from './locksInfo';
 
-type TLockType = 'Secp256k1' | 'Keccak256' | 'AnyPay';
-type TNetworkType = 'mainnet' | 'testnet';
+// type TLockType = 'Secp256k1' | 'Keccak256' | 'AnyPay';
+// type TNetworkType = 'mainnet' | 'testnet';
 
 export const secp256k1Dep = {
   outPoint: {
@@ -21,7 +21,7 @@ export const anypayDep = {
 
 export const keccak256Dep = {};
 
-export const getDepFromLockType = async (lockType: TLockType, NetworkManager?) => {
+export const getDepFromLockType = async (lockType, NetworkManager) => {
 //   const { networkType } = await NetworkManager.getCurrentNetwork();
   const networkType = 'testnet';
   if (!networkType || !NETWORKS.includes(networkType)) {
