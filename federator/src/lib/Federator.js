@@ -130,16 +130,17 @@ module.exports = class Federator {
                 _decimals: decimals, _granularity:granularity } = log.returnValues;
                                    
             // const ckbPrivateKey = '6db47b34420e526812ff77a78e716edc50800ec2e9ec4eec769ae010edf4b016';
-            const federatorPK  = 'a64073f745548b3f860d0a6abca95ffbff0b7839b5e8e0f5066287deea1d5dad';           
+            const federatorPK  = '0x82312a7eb2168e6f36401f35942062f75b17466dce7df8be484e7b9588a09d03';           
             // const ckbPublicKey = this.privateToPublic(Buffer.from(ckbPrivateKey, 'hex'));
             // const ckbPublicKey = this.privateToPublic(Buffer.from(ckbPrivateKey, 'hex')).toString('hex');
-            const fedPublicKey = this.privateToPublic(Buffer.from(federatorPK, 'hex')).toString('hex');
-            const fedAddres = this.publicKeyToAddress(fedPublicKey,'ckt');
-            console.log(/fedAddres/,fedAddres);
+            // const fedPublicKey = this.privateToPublic(Buffer.from(federatorPK, 'hex')).toString('hex');
+            //const fedAddres = this.publicKeyToAddress(fedPublicKey,'ckt');
+            const fedAddres = 'ckt1qyqwtq7qhg6j9hfqxnndmxyzmlamn85dhs7sjn8rsl';
+            console.log(/fedAddres/,fedAddres); //ckt1qyqdzyak353u6vf900t5qfmzzsr4wpx6a96s6749ne
 
             const toCKBAddress = 'ckt1qyqgadxhtq27ygrm62dqkdj32gl95j8gl56qum0yyn';
             const ckbAmount = this.mainWeb3.utils.fromWei(amount, 'ether');
-            const mintResult = await mintSudtTransaction(fedAddres,toCKBAddress, ckbAmount, 10000 ,"0x" + federatorPK);
+            const mintResult = await mintSudtTransaction(fedAddres,toCKBAddress, ckbAmount * 10, 10000 ,federatorPK);
             console.log(/mintResult/,mintResult);
 
         }

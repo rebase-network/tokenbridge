@@ -59,6 +59,14 @@ const CKB_TOKEN_DECIMALS = 10 ** 8;
 	return "Secp256k1"
 }
 
+const TestDaiTypeScript = {
+    hashType: 'data',
+    codeHash: '0x48dbf59b4c7ee1547238021b4869bceedf4eea6b43772e5d66ef8865b6ae7212',
+    args: '0x0466a2e7b55dad9353271614ca3a1b6016d3c6b69e3239c6ba7e37ef1bbe0a0e',
+};
+
+const TestDaiTypeHash = scriptToHash(TestDaiTypeScript); // '0x7abd58773ffee5866ffd30cd287e88f8139dd0cad5deb9e189c68b4b26bf9899';
+
 /**
  *
  * create Mint Sudt Raw transaction.
@@ -107,7 +115,8 @@ const CKB_TOKEN_DECIMALS = 10 ** 8;
 	}
 
 	// 1. output | mint sudt
-	const toLockHash = scriptToHash(toLockScript)
+    const toLockHash = scriptToHash(toLockScript)
+    const fromLockHash = scriptToHash(fromLockScript)
 	const toSudtCapacity = SUDT_MIN_CELL_CAPACITY * CKB_TOKEN_DECIMALS
 	const toSudtOutputCell = {
 		capacity: `0x${new BN(toSudtCapacity).toString(16)}`,
@@ -116,12 +125,7 @@ const CKB_TOKEN_DECIMALS = 10 ** 8;
 			codeHash: toLockScript.codeHash,
 			args: toLockScript.args,
 		},
-		type: {
-			hashType: 'data',
-			codeHash:
-				'0x48dbf59b4c7ee1547238021b4869bceedf4eea6b43772e5d66ef8865b6ae7212',
-			args: toLockHash,
-		},
+		type: TestDaiTypeScript,
 	}
 	rawTx.outputs.push(toSudtOutputCell)
 	const sUdtLeSend = toHexInLittleEndian(BigInt(mintSudtAmount), 16)
@@ -223,11 +227,11 @@ async function mintSudtTransaction (
 
 	//   const signedTx = await signSudtTransaction(lockHash, password, rawTxObj);
 	const rawTx = rawTxObj.tx
-	const signedTx = await ckb.signTransaction(privateKey)(rawTx, [])
+	const signedTx = await ckb.signTransaction(privateKey)(rawTx)
 	const txResultObj = {
 		txHash: null,
     }
-    console.log(/rawTx/,JSON.stringify(rawTx));
+    console.log(/signedTx/,JSON.stringify(signedTx));
 	try {
         const realTxHash = await ckb.rpc.sendTransaction(signedTx)
         console.log(/realTxHash/,realTxHash);
