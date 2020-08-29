@@ -1,9 +1,11 @@
 {
-    "bridge": "0x12ed69359919fc775bc2674860e8fe2d2b6a7b5d",
-    "federation": "0xda2295255633c26eaadbace5269b6e8bd2648ca0",
-    "testToken": "0x37f6ef8440f2390bb78b8a3bf91d82fddbb42b32",
-    "multisig": "0x040007b1804ad78a97f541bebed377dcb60e4138",
-    "allowTokens": "0xe4aa0f414725c9322a1a9d80d469c5e234786653",
-    "host": "<YOUR NODE HOST AND RPC PORT>",
-    "fromBlock": 19234172
+	"bridge": "0xf93d1b911c8f1f8ef445f0ec044cdb71bae36fba",
+	"federation": "0xe97dcd3d80778985447c09ff6be23fe2d2b3486a",
+	"multiSig": "0xc2087daf3f41afc1279f64b34ab0a091db32d40c",
+	"allowTokens": "0xecbda9e249ac6ce3cacdff87d5b07b938f5b8c79",
+	"testToken": "0x92e1b359bec60b966ce93295ed36fee10723990b",
+	"host": "https://kovan.infura.io/v3/945c07d86744491cb15c4547227b2dfa",
+	"fromBlock": 20536111,
+	"ckb_rpc_endpoint": "https://testnet.getsynapse.io/rpc",
+	"cache_layer_endpoint": "https://testnet.getsynapse.io/api"
 }
