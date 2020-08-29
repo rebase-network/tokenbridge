@@ -129,23 +129,18 @@ module.exports = class Federator {
             const { _to: receiver, _amount: amount, _symbol: symbol, _tokenAddress: tokenAddress,
                 _decimals: decimals, _granularity:granularity } = log.returnValues;
             
-            const ckbPrivateKey = '6db47b34420e526812ff77a78e716edc50800ec2e9ec4eec769ae010edf4b016';
-            // _tokenAddress: '0x92E1B359BEc60b966cE93295eD36FeE10723990B',
-            // _to: '0xEBB956Ec130A524Dfd2c18393df12D2045d12A0B',
-            // _amount: '1000000000000000000',
-            // _symbol: 'MAIN',
-            // _userData: null,
-            // _decimals: '18',
-            // _granularity: '1'            
+                                   
+            // const ckbPrivateKey = '6db47b34420e526812ff77a78e716edc50800ec2e9ec4eec769ae010edf4b016';
+            const federatorPK  = 'a64073f745548b3f860d0a6abca95ffbff0b7839b5e8e0f5066287deea1d5dad';           
             // const ckbPublicKey = this.privateToPublic(Buffer.from(ckbPrivateKey, 'hex'));
-            const ckbPublicKey = this.privateToPublic(Buffer.from(ckbPrivateKey, 'hex')).toString('hex');
-            const ckbAddres = this.publicKeyToAddress(ckbPublicKey,'ckt');
-            console.log(/ckbPublicKey/,ckbPublicKey);
-            console.log(/ckbAddres/,ckbAddres);
+            // const ckbPublicKey = this.privateToPublic(Buffer.from(ckbPrivateKey, 'hex')).toString('hex');
+            const fedPublicKey = this.privateToPublic(Buffer.from(federatorPK, 'hex')).toString('hex');
+            const fedAddres = this.publicKeyToAddress(fedPublicKey,'ckt');
+            console.log(/fedAddres/,fedAddres);
+
+            const toCKBAddress = 'ckt1qyqgadxhtq27ygrm62dqkdj32gl95j8gl56qum0yyn';
             const ckbAmount = this.mainWeb3.utils.fromWei(amount, 'ether');
-            console.log(/ckbAmount/,ckbAmount);
-            console.log(/mintSudtTransaction/,mintSudtTransaction);
-            const mintResult = await mintSudtTransaction(ckbAddres,ckbAddres,ckbAmount, 10000 ,"0x" + ckbPrivateKey);
+            const mintResult = await mintSudtTransaction(fedAddres,toCKBAddress, ckbAmount, 10000 ,"0x" + federatorPK);
             console.log(/mintResult/,mintResult);
 
         }
