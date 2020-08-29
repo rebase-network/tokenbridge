@@ -32,7 +32,7 @@ module.exports = class Federator {
     }
 
     async run() {
-        let retries = 3;
+        let retries = 1;
         const sleepAfterRetrie = 3000;
         while(retries > 0) {
             try {
