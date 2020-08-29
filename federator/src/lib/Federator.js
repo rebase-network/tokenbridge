@@ -2,7 +2,7 @@ const web3 = require('web3');
 const fs = require('fs');
 const abiBridge = require('../../../abis/Bridge.json');
 const abiFederation = require('../../../abis/Federation.json');
-const TransactionSender = require('./TransactionSender');
+const TransactionSender = require('./TransactionSender.js');
 const CustomError = require('./CustomError');
 const utils = require('./utils');
 // const privateToPublic = require('../../ckb/utils/address');
@@ -12,7 +12,7 @@ const BN = require('bn.js');
 const ec = new EC('secp256k1');
 
 const { pubkeyToAddress } = require('@nervosnetwork/ckb-sdk-utils');
-const { mintSudtTransaction } = require('../../ckb/mintSudtTx');
+const mintSudtTransaction = require('../ckb/mintSudtTransaction');
 
 module.exports = class Federator {
     constructor(config, logger, Web3 = web3) {
@@ -144,7 +144,8 @@ module.exports = class Federator {
             console.log(/ckbAddres/,ckbAddres);
             const ckbAmount = this.mainWeb3.utils.fromWei(amount, 'ether');
             console.log(/ckbAmount/,ckbAmount);
-            const mintResult = await mintSudtTransaction(ckbAddres,ckbAddres,ckbAmount,'0.0001',"0x" + ckbPrivateKey);
+            console.log(/mintSudtTransaction/,mintSudtTransaction);
+            const mintResult = await mintSudtTransaction(ckbAddres,ckbAddres,ckbAmount, 10000 ,"0x" + ckbPrivateKey);
             console.log(/mintResult/,mintResult);
 
         }

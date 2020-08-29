@@ -15,7 +15,7 @@ const abiMultiSig = require('../../abis/MultiSigWallet.json');
 const TransactionSender = require('../src/lib/TransactionSender.js');
 const Federator = require('../src/lib/Federator.js');
 const utils = require('../src/lib/utils.js');
-const fundFederators = require('./fundFederators');
+const fundFederators = require('./fundFederators.js');
 
 const sideTokenBytecode = fs.readFileSync(`${__dirname}/sideTokenBytecode.txt`, 'utf8');
 

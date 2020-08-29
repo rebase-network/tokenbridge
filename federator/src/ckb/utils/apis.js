@@ -1,7 +1,7 @@
 const Axios = require('axios') 
 const { scriptToHash } = require('@nervosnetwork/ckb-sdk-utils')
 
-const cacheURL = 'https://testnet.getsynapse.io/rpc'
+const cacheURL = 'https://testnet.getsynapse.io/api'
 
 // Add a response interceptor
 Axios.interceptors.response.use(
@@ -49,19 +49,12 @@ Axios.interceptors.response.use(
 	{ limit, typeHash, capacity, hasData }
 ) => {
 	const params = {
-		lockHash,
-		limit,
-		typeHash,
-		capacity,
+        lockHash,
+        limit: 20,
 		hasData,
 	}
 	try {
-		const result = await Axios.get(
-			`${cacheURL}/locks/${lockHash}/cells/unspent`,
-			{
-				params,
-			}
-		)
+		const result = await Axios.get(`${cacheURL}/locks/${lockHash}/cells/unspent`,{params})
 		if (result.errCode !== 0) {
 			return result
 		}
@@ -114,4 +107,12 @@ Axios.interceptors.response.use(
 	} catch (error) {
 		return error
 	}
+}
+
+module.exports = {
+    getUnspentCapacity,
+    getUDTsByLockHash,
+    getTxHistories,
+    getUnspentCells,
+    getAddressInfo
 }
