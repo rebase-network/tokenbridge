@@ -1,7 +1,5 @@
-import Axios from 'axios'
-// import configService from '@src/config';
-import { scriptToHash } from '@nervosnetwork/ckb-sdk-utils'
-// import NetworkManager from '@src/common/networkManager';
+const Axios = require('axios') 
+const { scriptToHash } = require('@nervosnetwork/ckb-sdk-utils')
 
 const cacheURL = 'https://testnet.getsynapse.io/rpc'
 
@@ -24,7 +22,7 @@ Axios.interceptors.response.use(
 	}
 )
 
-export const getAddressInfo = async (lockHash) => {
+ const getAddressInfo = async (lockHash) => {
 	try {
 		const result = await Axios.get(`${cacheURL}/locks/${lockHash}/capacity`)
 		if (result.errCode !== 0) {
@@ -37,7 +35,7 @@ export const getAddressInfo = async (lockHash) => {
 	}
 }
 
-// export interface UnspentCellsParams {
+//  interface UnspentCellsParams {
 // 	//   lockHash: string;
 // 	limit?: string
 // 	typeHash?: string
@@ -46,7 +44,7 @@ export const getAddressInfo = async (lockHash) => {
 // }
 
 // https://github.com/rebase-network/ckb-cache-layer/blob/master/doc.md
-export const getUnspentCells = async (
+ const getUnspentCells = async (
 	lockHash,
 	{ limit, typeHash, capacity, hasData }
 ) => {
@@ -74,7 +72,7 @@ export const getUnspentCells = async (
 	}
 }
 
-export const getTxHistories = async (lockHash) => {
+ const getTxHistories = async (lockHash) => {
 	const url = `${cacheURL}/locks/${lockHash}/txs`
 	const result = await Axios.get(url)
 
@@ -86,7 +84,7 @@ export const getTxHistories = async (lockHash) => {
 // 	typeScripts?: CKBComponents.Script[]
 // }
 
-export const getUDTsByLockHash = async (params) => {
+ const getUDTsByLockHash = async (params) => {
 	const { lockHash } = params
 	const pTypeScripts = params.typeScripts
 	const typeHashes = []
@@ -106,7 +104,7 @@ export const getUDTsByLockHash = async (params) => {
 	return result.data
 }
 
-export const getUnspentCapacity = async (lockHash) => {
+ const getUnspentCapacity = async (lockHash) => {
 	try {
 		const result = await Axios.get(`${cacheURL}/locks/${lockHash}/capacity`)
 		if (result.errCode !== 0) {
@@ -116,12 +114,4 @@ export const getUnspentCapacity = async (lockHash) => {
 	} catch (error) {
 		return error
 	}
-}
-
-export default {
-	getAddressInfo,
-	getUnspentCells,
-	getTxHistories,
-	getUDTsByLockHash,
-	getUnspentCapacity,
 }

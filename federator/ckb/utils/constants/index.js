@@ -1,4 +1,4 @@
-export const MESSAGE_TYPE = {
+const MESSAGE_TYPE = {
   IMPORT_MNEMONIC: 'IMPORT_MNEMONIC',
   GEN_MNEMONIC: 'GEN_MNEMONIC',
   RECE_MNEMONIC: 'RECE_MNEMONIC',
@@ -71,39 +71,39 @@ export const MESSAGE_TYPE = {
   DELETE_WALLET_OK: 'DELETE_WALLET_OK',
 };
 
-export const Ckb = {
+const Ckb = {
   MainNetCodeHash: '0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8',
   TestNetCodeHash: '0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8',
 };
 
-export const KEYSTORE_TYPE = {
+const KEYSTORE_TYPE = {
   MNEMONIC_TO_KEYSTORE: '1',
   KEYSTORE_TO_KEYSTORE: '2',
   PRIVATEKEY_TO_KEYSTORE: '3',
 };
 
-export const TESTNET_EXPLORER_URL = 'https://explorer.nervos.org/aggron';
-export const MAINNET_EXPLORER_URL = 'https://explorer.nervos.org';
+const TESTNET_EXPLORER_URL = 'https://explorer.nervos.org/aggron';
+const MAINNET_EXPLORER_URL = 'https://explorer.nervos.org';
 
-export const ADDRESS_TYPE_CODEHASH = {
+const ADDRESS_TYPE_CODEHASH = {
   Secp256k1: '0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8',
   AnyPay: '0x86a1c6987a4acbe1a887cca4c9dd2ac9fcb07405bbeda51b861b18bbf7492c4b',
   Keccak256: '0xa5b896894539829f5e7c5902f0027511f94c70fa2406d509e7c6d1df76b06f08',
 };
 
-export const enum LockType {
-  Secp256k1 = 'Secp256k1',
-  AnyPay = 'AnyPay',
-  Keccak256 = 'Keccak256',
-}
+// const enum LockType {
+//   Secp256k1 = 'Secp256k1',
+//   AnyPay = 'AnyPay',
+//   Keccak256 = 'Keccak256',
+// }
 
-export const MIN_TRANSFER_CELL_CAPACITY = 0;
-export const MIN_CELL_CAPACITY = 61;
-export const SUDT_MIN_CELL_CAPACITY = 142;
-export const EMPTY_TX_HASH = '0x0000000000000000000000000000000000000000000000000000000000000000';
-export const EMPTY_DATA_HASH = EMPTY_TX_HASH;
-export const CKB_TOKEN_DECIMALS = 10 ** 8;
-export const MIN_FEE_RATE = '1000';
-export const EMPTY_WITNESS =
+const MIN_TRANSFER_CELL_CAPACITY = 0;
+const MIN_CELL_CAPACITY = 61;
+const SUDT_MIN_CELL_CAPACITY = 142;
+const EMPTY_TX_HASH = '0x0000000000000000000000000000000000000000000000000000000000000000';
+const EMPTY_DATA_HASH = EMPTY_TX_HASH;
+const CKB_TOKEN_DECIMALS = 10 ** 8;
+const MIN_FEE_RATE = '1000';
+const EMPTY_WITNESS =
   '0x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000';
-export const EMPTY_OUTPUT_DATA = '0x00000000000000000000000000000000';
+const EMPTY_OUTPUT_DATA = '0x00000000000000000000000000000000';

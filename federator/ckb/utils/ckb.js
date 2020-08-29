@@ -1,4 +1,4 @@
-import CKB from '@nervosnetwork/ckb-sdk-core'
+const CKB = require('@nervosnetwork/ckb-sdk-core')
 // import NetworkManager from '@common/networkManager';
 
 const getCKB = async () => {
@@ -7,4 +7,4 @@ const getCKB = async () => {
 	return new CKB(nodeURL)
 }
 
-export default getCKB
+// export default getCKB

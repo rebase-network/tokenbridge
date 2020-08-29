@@ -10,8 +10,8 @@ const Scheduler = require('./services/Scheduler.js');
 const Federator = require('./lib/Federator.js');
 
 const logger = log4js.getLogger('Federators');
-logger.info('RSK Host', config.mainchain.host);
-logger.info('ETH Host', config.sidechain.host);
+logger.info('Kovan Host', config.mainchain.host);
+logger.info('Aggron Host', config.sidechain.host);
 
 if(!config.mainchain || !config.sidechain) {
     logger.error('Mainchain and Sidechain configuration are required');
@@ -36,7 +36,7 @@ scheduler.start().catch((err) => {
 async function run() {
     try {
         await mainFederator.run();
-        await sideFederator.run();
+        // await sideFederator.run();
     } catch(err) {
         logger.error('Unhandled Error on run()', err);
         process.exit();

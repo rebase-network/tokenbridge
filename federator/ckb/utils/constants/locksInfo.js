@@ -1,12 +1,12 @@
-import { ScriptHashType } from '@keyper/specs'
-import { NETWORK_TYPES } from './networks'
+const { ScriptHashType } = require('@keyper/specs')
+// const { NETWORK_TYPES } = require('./networks')
 
-const { testnet, mainnet } = NETWORK_TYPES
-export const NETWORKS = [testnet, mainnet]
+// const { testnet, mainnet } = NETWORK_TYPES
+// const NETWORKS = [testnet, mainnet]
 
 // https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0024-ckb-system-script-list/0024-ckb-system-script-list.md
-export default {
-	[testnet]: {
+const locksInfo =  {
+	testnet: {
 		secp256k1: {
 			codeHash:
 				'0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8',
@@ -35,7 +35,7 @@ export default {
 			index: '0x0',
 		},
 	},
-	[mainnet]: {
+	mainnet: {
 		secp256k1: {
 			codeHash:
 				'0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8',

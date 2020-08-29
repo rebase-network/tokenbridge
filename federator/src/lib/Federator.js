@@ -5,6 +5,14 @@ const abiFederation = require('../../../abis/Federation.json');
 const TransactionSender = require('./TransactionSender');
 const CustomError = require('./CustomError');
 const utils = require('./utils');
+// const privateToPublic = require('../../ckb/utils/address');
+const crypto = require('crypto');
+const EC = require('elliptic').ec;
+const BN = require('bn.js');
+const ec = new EC('secp256k1');
+
+const { pubkeyToAddress } = require('@nervosnetwork/ckb-sdk-utils');
+const { mintSudtTransaction } = require('../../ckb/mintSudtTx');
 
 module.exports = class Federator {
     constructor(config, logger, Web3 = web3) {
@@ -96,59 +104,105 @@ module.exports = class Federator {
         }
     }
 
+    privateToPublic(privateKey) {
+        if (privateKey.length !== 32) {
+          throw new Error('Private key must be 32 bytes');
+        }
+        return Buffer.from(ec.keyFromPrivate(privateKey).getPublic(true, 'hex'), 'hex');
+    };
+
+    publicKeyToAddress = (publicKey, prefix) => {
+        const pubkey = publicKey.startsWith('0x') ? publicKey : `0x${publicKey}`;
+        return pubkeyToAddress(pubkey, {
+          prefix,
+          type: "0x01",
+          codeHashOrCodeHashIndex: '0x00',
+        });
+      };
+
     async _processLogs(logs, toBlock) {
-        try {
-            const transactionSender = new TransactionSender(this.sideWeb3, this.logger);
-            const from = await transactionSender.getAddress(this.config.privateKey);
+
+        for(let log of logs) {
             
-            for(let log of logs) {
-                this.logger.info('Processing event log:', log);
+            this.logger.info('Processing event log:', log);
 
-                const { _to: receiver, _amount: amount, _symbol: symbol, _tokenAddress: tokenAddress,
-                    _decimals: decimals, _granularity:granularity } = log.returnValues;
+            const { _to: receiver, _amount: amount, _symbol: symbol, _tokenAddress: tokenAddress,
+                _decimals: decimals, _granularity:granularity } = log.returnValues;
+            
+            const ckbPrivateKey = '6db47b34420e526812ff77a78e716edc50800ec2e9ec4eec769ae010edf4b016';
+            // _tokenAddress: '0x92E1B359BEc60b966cE93295eD36FeE10723990B',
+            // _to: '0xEBB956Ec130A524Dfd2c18393df12D2045d12A0B',
+            // _amount: '1000000000000000000',
+            // _symbol: 'MAIN',
+            // _userData: null,
+            // _decimals: '18',
+            // _granularity: '1'            
+            // const ckbPublicKey = this.privateToPublic(Buffer.from(ckbPrivateKey, 'hex'));
+            const ckbPublicKey = this.privateToPublic(Buffer.from(ckbPrivateKey, 'hex')).toString('hex');
+            const ckbAddres = this.publicKeyToAddress(ckbPublicKey,'ckt');
+            console.log(/ckbPublicKey/,ckbPublicKey);
+            console.log(/ckbAddres/,ckbAddres);
+            const ckbAmount = this.mainWeb3.utils.fromWei(amount, 'ether');
+            console.log(/ckbAmount/,ckbAmount);
+            const mintResult = await mintSudtTransaction(ckbAddres,ckbAddres,ckbAmount,'0.0001',"0x" + ckbPrivateKey);
+            console.log(/mintResult/,mintResult);
 
-                let transactionId = await this.federationContract.methods.getTransactionId(
-                    tokenAddress,
-                    receiver,
-                    amount,
-                    symbol,
-                    log.blockHash,
-                    log.transactionHash,
-                    log.logIndex,
-                    decimals,
-                    granularity
-                ).call();
-                this.logger.info('get transaction id:', transactionId);
-
-                let wasProcessed = await this.federationContract.methods.transactionWasProcessed(transactionId).call();
-                if (!wasProcessed) {
-                    let hasVoted = await this.federationContract.methods.hasVoted(transactionId).call({from: from});
-                    if(!hasVoted) {
-                        this.logger.info(`Voting tx: ${log.transactionHash} block: ${log.blockHash} token: ${symbol}`);
-                        await this._voteTransaction(tokenAddress,
-                            receiver,
-                            amount,
-                            symbol,
-                            log.blockHash,
-                            log.transactionHash,
-                            log.logIndex,
-                            decimals,
-                            granularity);
-                    } else {
-                        this.logger.debug(`Block: ${log.blockHash} Tx: ${log.transactionHash} token: ${symbol}  has already been voted by us`);
-                    }
-                    
-                } else {
-                    this.logger.debug(`Block: ${log.blockHash} Tx: ${log.transactionHash} token: ${symbol} was already processed`);
-                }
-            }
-            this._saveProgress(this.lastBlockPath, toBlock);
-
-            return true;
-        } catch (err) {
-            throw new CustomError(`Exception processing logs`, err);
         }
     }
+
+    // async _processLogs(logs, toBlock) {
+    //     try {
+    //         const transactionSender = new TransactionSender(this.sideWeb3, this.logger);
+    //         const from = await transactionSender.getAddress(this.config.privateKey);
+            
+    //         for(let log of logs) {
+    //             this.logger.info('Processing event log:', log);
+
+    //             const { _to: receiver, _amount: amount, _symbol: symbol, _tokenAddress: tokenAddress,
+    //                 _decimals: decimals, _granularity:granularity } = log.returnValues;
+
+    //             let transactionId = await this.federationContract.methods.getTransactionId(
+    //                 tokenAddress,
+    //                 receiver,
+    //                 amount,
+    //                 symbol,
+    //                 log.blockHash,
+    //                 log.transactionHash,
+    //                 log.logIndex,
+    //                 decimals,
+    //                 granularity
+    //             ).call();
+    //             this.logger.info('get transaction id:', transactionId);
+
+    //             let wasProcessed = await this.federationContract.methods.transactionWasProcessed(transactionId).call();
+    //             if (!wasProcessed) {
+    //                 let hasVoted = await this.federationContract.methods.hasVoted(transactionId).call({from: from});
+    //                 if(!hasVoted) {
+    //                     this.logger.info(`Voting tx: ${log.transactionHash} block: ${log.blockHash} token: ${symbol}`);
+    //                     await this._voteTransaction(tokenAddress,
+    //                         receiver,
+    //                         amount,
+    //                         symbol,
+    //                         log.blockHash,
+    //                         log.transactionHash,
+    //                         log.logIndex,
+    //                         decimals,
+    //                         granularity);
+    //                 } else {
+    //                     this.logger.debug(`Block: ${log.blockHash} Tx: ${log.transactionHash} token: ${symbol}  has already been voted by us`);
+    //                 }
+                    
+    //             } else {
+    //                 this.logger.debug(`Block: ${log.blockHash} Tx: ${log.transactionHash} token: ${symbol} was already processed`);
+    //             }
+    //         }
+    //         this._saveProgress(this.lastBlockPath, toBlock);
+
+    //         return true;
+    //     } catch (err) {
+    //         throw new CustomError(`Exception processing logs`, err);
+    //     }
+    // }
 
     async _voteTransaction(tokenAddress, receiver, amount, symbol, blockHash, transactionHash, logIndex, decimals, granularity) {
         try {

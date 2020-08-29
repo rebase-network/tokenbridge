@@ -1,12 +1,12 @@
-import { ScriptHashType } from '@keyper/specs'
-import { NETWORK_TYPES } from './networks'
+const { ScriptHashType } = require('@keyper/specs')
+// const { NETWORK_TYPES } = require('./networks')
 
-const { testnet, mainnet } = NETWORK_TYPES
-export const NETWORKS = [testnet, mainnet]
+// const { testnet, mainnet } = NETWORK_TYPES
+// const NETWORKS = [testnet, mainnet]
 
 // https://github.com/nervosnetwork/rfcs/blob/master/rfcs/0024-ckb-system-script-list/0024-ckb-system-script-list.md
-export const TypesInfo = {
-	[testnet]: {
+const TypesInfo = {
+	testnet: {
 		simpleudt: {
 			codeHash:
 				'0x48dbf59b4c7ee1547238021b4869bceedf4eea6b43772e5d66ef8865b6ae7212',
@@ -17,7 +17,7 @@ export const TypesInfo = {
 			index: '0x0',
 		},
 	},
-	[mainnet]: {
+	mainnet: {
 		simpleudt: {
 			codeHash:
 				'0x48dbf59b4c7ee1547238021b4869bceedf4eea6b43772e5d66ef8865b6ae7212',
@@ -30,7 +30,7 @@ export const TypesInfo = {
 	},
 }
 
-export const getDepFromType = async (type = 'simpleudt', NetworkManager) => {
+const getDepFromType = async (type = 'simpleudt', NetworkManager) => {
 	//   const { networkType } = await NetworkManager.getCurrentNetwork();
 	const networkType = 'testnet'
 	if (!networkType || !NETWORKS.includes(networkType)) {
