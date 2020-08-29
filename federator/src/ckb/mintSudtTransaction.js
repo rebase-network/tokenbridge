@@ -229,7 +229,8 @@ async function mintSudtTransaction (
     }
     console.log(/rawTx/,JSON.stringify(rawTx));
 	try {
-		const realTxHash = await ckb.rpc.sendTransaction(signedTx)
+        const realTxHash = await ckb.rpc.sendTransaction(signedTx)
+        console.log(/realTxHash/,realTxHash);
 		txResultObj.txHash = realTxHash
 	} catch (error) {
 		console.error(`Failed to send tx: ${error}`)

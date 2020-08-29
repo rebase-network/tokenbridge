@@ -128,7 +128,6 @@ module.exports = class Federator {
 
             const { _to: receiver, _amount: amount, _symbol: symbol, _tokenAddress: tokenAddress,
                 _decimals: decimals, _granularity:granularity } = log.returnValues;
-            
                                    
             // const ckbPrivateKey = '6db47b34420e526812ff77a78e716edc50800ec2e9ec4eec769ae010edf4b016';
             const federatorPK  = 'a64073f745548b3f860d0a6abca95ffbff0b7839b5e8e0f5066287deea1d5dad';           

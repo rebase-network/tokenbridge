@@ -92,49 +92,49 @@ async function run({ mainchainFederators, sidechainFederators, config, sideConfi
 
 async function transfer(originFederators, destinationFederators, config, origin, destination) {
     try {
-        // let data = '';
-        // let originWeb3 = new Web3(config.mainchain.host);
-        // let destinationWeb3 = new Web3(config.sidechain.host);
+        let data = '';
+        let originWeb3 = new Web3(config.mainchain.host);
+        let destinationWeb3 = new Web3(config.sidechain.host);
 
-        // const originTokenContract = new originWeb3.eth.Contract(abiMainToken, config.mainchain.testToken);
-        // const transactionSender = new TransactionSender(originWeb3, logger);
-        // const destinationTransactionSender = new TransactionSender(destinationWeb3, logger);
+        const originTokenContract = new originWeb3.eth.Contract(abiMainToken, config.mainchain.testToken);
+        const transactionSender = new TransactionSender(originWeb3, logger);
+        const destinationTransactionSender = new TransactionSender(destinationWeb3, logger);
 
-        // const originBridgeAddress = config.mainchain.bridge;
-        // const amount = originWeb3.utils.toWei('1');
-        // const originAddress = originTokenContract.options.address;
+        const originBridgeAddress = config.mainchain.bridge;
+        const amount = originWeb3.utils.toWei('1');
+        const originAddress = originTokenContract.options.address;
 
 
-        // logger.info('------------- SENDING THE TOKENS -----------------');
-        // logger.debug('Getting address from pk');
-        // // userPrivateKey/ 0x6db47b34420e526812ff77a78e716edc50800ec2e9ec4eec769ae010edf4b016
-        // // userAddress/ 0xebb956ec130a524dfd2c18393df12d2045d12a0b
-        // // const userPrivateKey = originWeb3.eth.accounts.create().privateKey;
-        // const userPrivateKey =  '0x6db47b34420e526812ff77a78e716edc50800ec2e9ec4eec769ae010edf4b016';
-        // const userAddress = await transactionSender.getAddress(userPrivateKey);
-        // // await transactionSender.sendTransaction(userAddress, '', originWeb3.utils.toWei('1'), config.privateKey);
-        // // await destinationTransactionSender.sendTransaction(userAddress, '', originWeb3.utils.toWei('1'), config.privateKey);
-        // logger.info(`${origin} token addres ${originAddress} - User Address: ${userAddress}`);
+        logger.info('------------- SENDING THE TOKENS -----------------');
+        logger.debug('Getting address from pk');
+        // userPrivateKey/ 0x6db47b34420e526812ff77a78e716edc50800ec2e9ec4eec769ae010edf4b016
+        // userAddress/ 0xebb956ec130a524dfd2c18393df12d2045d12a0b
+        // const userPrivateKey = originWeb3.eth.accounts.create().privateKey;
+        const userPrivateKey =  '0x6db47b34420e526812ff77a78e716edc50800ec2e9ec4eec769ae010edf4b016';
+        const userAddress = await transactionSender.getAddress(userPrivateKey);
+        // await transactionSender.sendTransaction(userAddress, '', originWeb3.utils.toWei('1'), config.privateKey);
+        // await destinationTransactionSender.sendTransaction(userAddress, '', originWeb3.utils.toWei('1'), config.privateKey);
+        logger.info(`${origin} token addres ${originAddress} - User Address: ${userAddress}`);
 
-        // const initialUserBalance = await originWeb3.eth.getBalance(userAddress);
-        // logger.debug('Initial user balance ', initialUserBalance);
+        const initialUserBalance = await originWeb3.eth.getBalance(userAddress);
+        logger.debug('Initial user balance ', initialUserBalance);
 
-        // logger.debug('Aproving token transfer');
-        // data = originTokenContract.methods.transfer(userAddress, amount).encodeABI();
-        // await transactionSender.sendTransaction(originAddress, data, 0, config.privateKey);
-        // data = originTokenContract.methods.approve(originBridgeAddress, amount).encodeABI();
-        // await transactionSender.sendTransaction(originAddress, data, 0, userPrivateKey);
-        // logger.debug('Token transfer approved');
+        logger.debug('Aproving token transfer');
+        data = originTokenContract.methods.transfer(userAddress, amount).encodeABI();
+        await transactionSender.sendTransaction(originAddress, data, 0, config.privateKey);
+        data = originTokenContract.methods.approve(originBridgeAddress, amount).encodeABI();
+        await transactionSender.sendTransaction(originAddress, data, 0, userPrivateKey);
+        logger.debug('Token transfer approved');
 
-        // logger.debug('Bridge receiveTokens (transferFrom)');
-        // let bridgeContract = new originWeb3.eth.Contract(abiBridge, originBridgeAddress);
-        // data = bridgeContract.methods.receiveTokens(originAddress, amount).encodeABI();
-        // await transactionSender.sendTransaction(originBridgeAddress, data, 0, userPrivateKey);
-        // logger.debug('Bridge receivedTokens completed');
+        logger.debug('Bridge receiveTokens (transferFrom)');
+        let bridgeContract = new originWeb3.eth.Contract(abiBridge, originBridgeAddress);
+        data = bridgeContract.methods.receiveTokens(originAddress, amount).encodeABI();
+        await transactionSender.sendTransaction(originBridgeAddress, data, 0, userPrivateKey);
+        logger.debug('Bridge receivedTokens completed');
 
-        // let waitBlocks = config.confirmations;
-        // logger.debug(`Wait for ${waitBlocks} blocks`);
-        // await utils.waitBlocks(originWeb3, waitBlocks);
+        let waitBlocks = config.confirmations;
+        logger.debug(`Wait for ${waitBlocks} blocks`);
+        await utils.waitBlocks(originWeb3, waitBlocks);
 
         logger.debug('Starting federator processes');
 
