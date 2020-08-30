@@ -9,7 +9,8 @@ const mintSudtTransaction = require('../ckb/mintSudtTransaction');
 const {
   federatorPrivateKey,
   federatorAddress,
-  testCKBAddress,
+  userCkbAddress,
+  userEthAddress,
 } = require('./constants')
 module.exports = class Federator {
   constructor(config, logger, Web3 = web3) {
@@ -108,9 +109,14 @@ module.exports = class Federator {
         const { _amount: amount } = log.returnValues;
         const ckbAmountInShannon = this.mainWeb3.utils.fromWei(amount, 'ether') * 10 ** 8;
         const fee = 100000;
-        const mintResult = await mintSudtTransaction(federatorAddress, testCKBAddress, ckbAmountInShannon, fee, federatorPrivateKey);
+        const mintResult = await mintSudtTransaction(
+          federatorAddress,
+          userCkbAddress,
+          ckbAmountInShannon,
+          fee,
+          federatorPrivateKey
+        );
 
-        console.log(/aaaaaaaaaaaa/, federatorPrivateKey, federatorAddress, testCKBAddress);
         console.log(/mintResult/, mintResult);
 
         this._saveProgress(this.lastBlockPath, toBlock);
