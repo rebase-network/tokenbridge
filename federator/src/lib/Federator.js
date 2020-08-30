@@ -7,8 +7,8 @@ const CustomError = require('./CustomError');
 const utils = require('./utils');
 const mintSudtTransaction = require('../ckb/mintSudtTransaction');
 const {
-  federatorPrivateKey,
-  federatorAddress,
+  ckbUdtOwnPrivateKey,
+  ckbUdtOwnAddress,
   userCkbAddress,
   userEthAddress,
 } = require('./constants')
@@ -110,11 +110,11 @@ module.exports = class Federator {
         const ckbAmountInShannon = this.mainWeb3.utils.fromWei(amount, 'ether') * 10 ** 8;
         const fee = 100000;
         const mintResult = await mintSudtTransaction(
-          federatorAddress,
+          ckbUdtOwnAddress,
           userCkbAddress,
           ckbAmountInShannon,
           fee,
-          federatorPrivateKey
+          ckbUdtOwnPrivateKey
         );
 
         console.log(/mintResult/, mintResult);

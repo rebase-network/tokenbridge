@@ -1,9 +1,9 @@
 {
 	"bridge": "0xf93d1b911c8f1f8ef445f0ec044cdb71bae36fba",
-	"federation": "0xe97dcd3d80778985447c09ff6be23fe2d2b3486a",
+	"federation": "0xd79B0a288D49e7996F9d7C94e1C550Edd2629575",
 	"multiSig": "0xc2087daf3f41afc1279f64b34ab0a091db32d40c",
 	"allowTokens": "0xecbda9e249ac6ce3cacdff87d5b07b938f5b8c79",
-	"testToken": "0x92e1b359bec60b966ce93295ed36fee10723990b",
+	"testToken": "0x41c16473b12211892c813f52815f700440471aa0",
 	"host": "https://kovan.infura.io/v3/945c07d86744491cb15c4547227b2dfa",
 	"fromBlock": 20536111,
 	"ckb_rpc_endpoint": "https://testnet.getsynapse.io/rpc",
