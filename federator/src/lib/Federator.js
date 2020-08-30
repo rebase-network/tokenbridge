@@ -105,16 +105,18 @@ module.exports = class Federator {
     try {
       for (let log of logs) {
         this.logger.info('Processing event log:', log);
+        const { _amount: amount } = log.returnValues;
+        const ckbAmountInShannon = this.mainWeb3.utils.fromWei(amount, 'ether') * 10 ** 8;
+        const fee = 100000;
+        const mintResult = await mintSudtTransaction(federatorAddress, testCKBAddress, ckbAmountInShannon, fee, federatorPrivateKey);
 
-        const ckbAmount = this.mainWeb3.utils.fromWei(amount, 'ether');
-        const mintResult = await mintSudtTransaction(federatorAddress, testCKBAddress, ckbAmount * 10 ** 8, 100000, federatorPrivateKey);
-
+        console.log(/aaaaaaaaaaaa/, federatorPrivateKey, federatorAddress, testCKBAddress);
         console.log(/mintResult/, mintResult);
 
         this._saveProgress(this.lastBlockPath, toBlock);
         return true;
       }
-    } catch (error) {
+    } catch (err) {
       throw new CustomError(`Exception processing logs`, err);
     }
   }
