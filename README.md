@@ -10,6 +10,7 @@ This token bridge is a hackathon project, so it has very limited feature:
 ```bash
 cd federator
 npm i
+cp config/config.sample.js config/config.js
 npm run start
 ```
 
