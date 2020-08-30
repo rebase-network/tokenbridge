@@ -68,13 +68,13 @@ module.exports = class Federator {
                 }
                 fromBlock = parseInt(fromBlock)+1;
                 this.logger.debug('Running from Block', fromBlock);
-                
+
                 const recordsPerPage = 1000;
                 const numberOfPages = Math.ceil((toBlock - fromBlock) / recordsPerPage);
                 this.logger.debug(`Total pages ${numberOfPages}, blocks per page ${recordsPerPage}`);
 
                 var fromPageBlock = fromBlock;
-                for(var currentPage = 1; currentPage <= numberOfPages; currentPage++) { 
+                for(var currentPage = 1; currentPage <= numberOfPages; currentPage++) {
                     var toPagedBlock = fromPageBlock + recordsPerPage-1;
                     if(currentPage == numberOfPages) {
                         toPagedBlock = toBlock
@@ -124,15 +124,15 @@ module.exports = class Federator {
 
         try {
             for(let log of logs) {
-            
+
                 this.logger.info('Processing event log:', log);
-    
+
                 const { _to: receiver, _amount: amount, _symbol: symbol, _tokenAddress: tokenAddress,
                     _decimals: decimals, _granularity:granularity } = log.returnValues;
-                                       
+
                 // const ckbPrivateKey = '6db47b34420e526812ff77a78e716edc50800ec2e9ec4eec769ae010edf4b016';
-                // const federatorPK  = '0x82312a7eb2168e6f36401f35942062f75b17466dce7df8be484e7b9588a09d03';    
-                const federatorPK  = '0xdde136f5c95a2f37cb1480c3bc3d9f18b49225fc8449e5a16a853fc0a7d4efaa';            
+                // const federatorPK  = '0x82312a7eb2168e6f36401f35942062f75b17466dce7df8be484e7b9588a09d03';
+                const federatorPK  = '0xdde136f5c95a2f37cb1480c3bc3d9f18b49225fc8449e5a16a853fc0a7d4efaa';
                 // const ckbPublicKey = this.privateToPublic(Buffer.from(ckbPrivateKey, 'hex'));
                 // const ckbPublicKey = this.privateToPublic(Buffer.from(ckbPrivateKey, 'hex')).toString('hex');
                 // const fedPublicKey = this.privateToPublic(Buffer.from(federatorPK, 'hex')).toString('hex');
@@ -140,14 +140,14 @@ module.exports = class Federator {
                 // const fedAddres = 'ckt1qyqwtq7qhg6j9hfqxnndmxyzmlamn85dhs7sjn8rsl';
                 const fedAddres = 'ckt1qyqwtq7qhg6j9hfqxnndmxyzmlamn85dhs7sjn8rsl';
                 console.log(/fedAddres/,fedAddres); //ckt1qyqdzyak353u6vf900t5qfmzzsr4wpx6a96s6749ne
-    
+
                 const toCKBAddress = 'ckt1qyqgadxhtq27ygrm62dqkdj32gl95j8gl56qum0yyn';
                 const ckbAmount = this.mainWeb3.utils.fromWei(amount, 'ether');
-                const mintResult = await mintSudtTransaction(fedAddres, fedAddres, ckbAmount * 10 ** 8, 100000 ,federatorPK);
-                
+                const mintResult = await mintSudtTransaction(fedAddres, toCKBAddress, ckbAmount * 10 ** 8, 100000 ,federatorPK);
+
                 // 逻辑是不是先创建在转？？？
                 console.log(/mintResult/,mintResult);
-                
+
                 this._saveProgress(this.lastBlockPath, toBlock);
                 return true;
             }
@@ -160,7 +160,7 @@ module.exports = class Federator {
     //     try {
     //         const transactionSender = new TransactionSender(this.sideWeb3, this.logger);
     //         const from = await transactionSender.getAddress(this.config.privateKey);
-            
+
     //         for(let log of logs) {
     //             this.logger.info('Processing event log:', log);
 
@@ -197,7 +197,7 @@ module.exports = class Federator {
     //                 } else {
     //                     this.logger.debug(`Block: ${log.blockHash} Tx: ${log.transactionHash} token: ${symbol}  has already been voted by us`);
     //                 }
-                    
+
     //             } else {
     //                 this.logger.debug(`Block: ${log.blockHash} Tx: ${log.transactionHash} token: ${symbol} was already processed`);
     //             }
@@ -215,7 +215,7 @@ module.exports = class Federator {
 
             const transactionSender = new TransactionSender(this.sideWeb3, this.logger);
             this.logger.info(`Voting Transfer ${amount} of ${symbol} trough sidechain bridge ${this.sideBridgeContract.options.address} to receiver ${receiver}`);
-            
+
             let txId = await this.federationContract.methods.getTransactionId(
                 tokenAddress,
                 receiver,
@@ -227,7 +227,7 @@ module.exports = class Federator {
                 decimals,
                 granularity
             ).call();
-            
+
             let txData = await this.federationContract.methods.voteTransaction(
                 tokenAddress,
                 receiver,
