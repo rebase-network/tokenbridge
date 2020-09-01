@@ -47,6 +47,7 @@ async function run() {
     try {
         // await mainFederator.run();
         // await sideFederator.run();
+
         await ckbScanner.scanner();
     } catch(err) {
         logger.error('Unhandled Error on run()', err);
