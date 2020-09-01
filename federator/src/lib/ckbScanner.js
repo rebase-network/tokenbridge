@@ -10,41 +10,16 @@ module.exports = class CkbScanner {
     this.rpc = rpc;
   }
 
-  async scanner() {
-
+  async scanner(fromBlkNum) {
     const _tipBlkNum = await this.rpc.getTipBlockNumber()
     const tipBlkNum = parseInt(_tipBlkNum, 16)
-    let confirmations = 10
-
-    let toBlkNum = tipBlkNum - confirmations
 
     console.log(/tipBlkNum/, tipBlkNum)
     this.logger.info("tipBlkNum: " + tipBlkNum)
+    let toBlkNum = fromBlkNum
 
-    if (!fs.existsSync('./storage')) {
-      fs.mkdirSync('./storage')
-    }
-
-    let fromBlkNum = null
-    try {
-      fromBlkNum = fs.readFileSync('./storage/currBlock.txt', 'utf8')
-      console.log(/fromBlkNum/, fromBlkNum)
-    }catch (err) {
-      fromBlkNum = 1
-    }
-
-    if (fromBlkNum >= toBlkNum) {
-      this.logger.warn(`fromBlkNum >= toBlkNum`)
-      return false
-    }
-
-    fromBlkNum = parseInt(fromBlkNum) + 1
-    this.logger.debug('Running from Block', fromBlkNum)
-
-    let step = fromBlkNum
-
-    for (; step <= toBlkNum; step++) {
-      this.findUDT(step)
+    for (; toBlkNum <= tipBlkNum; toBlkNum++) {
+      this.findUDT(toBlkNum)
       sleep(500)
     }
 

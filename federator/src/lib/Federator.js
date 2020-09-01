@@ -7,9 +7,10 @@ const CustomError = require('./CustomError');
 const utils = require('./utils');
 const mintSudtTransaction = require('../ckb/mintSudtTransaction');
 const {
-  federatorPrivateKey,
-  federatorAddress,
-  testCKBAddress,
+  ckbUdtOwnPrivateKey,
+  ckbUdtOwnAddress,
+  userCkbAddress,
+  userEthAddress,
 } = require('./constants')
 module.exports = class Federator {
   constructor(config, logger, Web3 = web3) {
@@ -29,6 +30,9 @@ module.exports = class Federator {
   }
 
   async run() {
+    console.log(/before unlockEthDai/);
+    this.unlockEthDai();
+    console.log(/after unlockEthDai/);
     let retries = 1;
     const sleepAfterRetrie = 3000;
     while (retries > 0) {
@@ -108,9 +112,14 @@ module.exports = class Federator {
         const { _amount: amount } = log.returnValues;
         const ckbAmountInShannon = this.mainWeb3.utils.fromWei(amount, 'ether') * 10 ** 8;
         const fee = 100000;
-        const mintResult = await mintSudtTransaction(federatorAddress, testCKBAddress, ckbAmountInShannon, fee, federatorPrivateKey);
+        const mintResult = await mintSudtTransaction(
+          ckbUdtOwnAddress,
+          userCkbAddress,
+          ckbAmountInShannon,
+          fee,
+          ckbUdtOwnPrivateKey
+        );
 
-        console.log(/aaaaaaaaaaaa/, federatorPrivateKey, federatorAddress, testCKBAddress);
         console.log(/mintResult/, mintResult);
 
         this._saveProgress(this.lastBlockPath, toBlock);
@@ -121,61 +130,46 @@ module.exports = class Federator {
     }
   }
 
-  async unlockEthDai(logs, toBlock) {
+  async unlockEthDai(
+    tokenAddress = '0x41c16473b12211892c813f52815f700440471aa0',
+    receiver = userEthAddress,
+    amount = 1,
+    symbol = "MAIN",
+    blockHash = '0x97e18d66c16b62011f253da66794b55a91044385880ebf6a26ad35350ffc395b',
+    transactionHash = '0xa4859975f66d6fb4ea1921104229aa3d5d4b1277227baaf27be6edbee07db856',
+    logIndex = 0,
+    decimals = 18,
+    granularity = 1
+  ) {
+    console.log(/params/, {
+      tokenAddress ,
+      receiver ,
+      amount ,
+      symbol ,
+      blockHash ,
+      transactionHash ,
+      logIndex ,
+      decimals,
+      granularity,
+      federation: this.config.mainchain.federation,
+    });
+
     try {
-      const transactionSender = new TransactionSender(this.sideWeb3, this.logger);
-      const from = await transactionSender.getAddress(this.config.privateKey);
 
-      for (let log of logs) {
-        this.logger.info('Processing event log:', log);
+      let tx = await this.mainBridgeContract.methods.acceptTransfer(
+        tokenAddress,
+        receiver,
+        amount,
+        symbol,
+        blockHash,
+        transactionHash,
+        logIndex,
+        decimals,
+        granularity,
+      ).call({ from: this.config.mainchain.federation });
 
-        const {
-          _to: receiver,
-          _amount: amount,
-          _symbol: symbol,
-          _tokenAddress: tokenAddress,
-          _decimals: decimals,
-          _granularity: granularity
-        } = log.returnValues;
-
-        let transactionId = await this.federationContract.methods.getTransactionId(
-          tokenAddress,
-          receiver,
-          amount,
-          symbol,
-          log.blockHash,
-          log.transactionHash,
-          log.logIndex,
-          decimals,
-          granularity
-        ).call();
-        this.logger.info('get transaction id:', transactionId);
-
-        let wasProcessed = await this.federationContract.methods.transactionWasProcessed(transactionId).call();
-        if (!wasProcessed) {
-          let hasVoted = await this.federationContract.methods.hasVoted(transactionId).call({
-            from: from
-          });
-          if (!hasVoted) {
-            this.logger.info(`Voting tx: ${log.transactionHash} block: ${log.blockHash} token: ${symbol}`);
-            await this._voteTransaction(tokenAddress,
-              receiver,
-              amount,
-              symbol,
-              log.blockHash,
-              log.transactionHash,
-              log.logIndex,
-              decimals,
-              granularity);
-          } else {
-            this.logger.debug(`Block: ${log.blockHash} Tx: ${log.transactionHash} token: ${symbol}  has already been voted by us`);
-          }
-
-        } else {
-          this.logger.debug(`Block: ${log.blockHash} Tx: ${log.transactionHash} token: ${symbol} was already processed`);
-        }
-      }
-      this._saveProgress(this.lastBlockPath, toBlock);
+      console.log(/tx:/, tx);
+      // this._saveProgress(this.lastBlockPath, toBlock);
 
       return true;
     } catch (err) {
