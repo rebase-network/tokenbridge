@@ -1,8 +1,10 @@
 const log4js = require('log4js');
+const CKB = require('@nervosnetwork/ckb-sdk-core').default;
 
 // Configurations
 const config = require('../config/config.js');
 const logConfig = require('../config/log-config.json');
+const CkbScanner = require('./lib/ckbScanner');
 log4js.configure(logConfig);
 
 // Services
@@ -13,11 +15,17 @@ const logger = log4js.getLogger('Federators');
 logger.info('Kovan Host', config.mainchain.host);
 logger.info('Aggron Host', config.sidechain.host);
 
+// ckb rpc
+const rpcUrl = 'https://testnet.getsynapse.io/rpc'
+const ckb = new CKB(rpcUrl)
+const ckbRpc = ckb.rpc
+
 if(!config.mainchain || !config.sidechain) {
     logger.error('Mainchain and Sidechain configuration are required');
     process.exit();
 }
 
+const ckbScanner = new CkbScanner({}, log4js.getLogger('ckb'), ckbRpc);
 const mainFederator = new Federator(config, log4js.getLogger('MAIN-FEDERATOR'));
 const sideFederator = new Federator({
     ...config,
