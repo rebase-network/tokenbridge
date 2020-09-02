@@ -25,7 +25,7 @@ if(!config.mainchain || !config.sidechain) {
     process.exit();
 }
 
-const ckbScanner = new CkbScanner({}, log4js.getLogger('ckb'), ckbRpc);
+const ckbScanner = new CkbScanner(config, log4js.getLogger('ckb'), ckbRpc);
 const mainFederator = new Federator(config, log4js.getLogger('MAIN-FEDERATOR'));
 const sideFederator = new Federator({
     ...config,
